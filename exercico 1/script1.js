@@ -17,5 +17,5 @@ if(soma>10)
 
 
 if (soma<10)
-alert9"o resultado e menor que 10")
+alert"o resultado e menor que 10")
 }
