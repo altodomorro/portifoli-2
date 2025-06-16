@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<title>Comparador de Números Moderno</title>
+<meta name="description" content="Aplicação moderna para comparar dois números e exibir mensagem inspiradora se a diferença for maior que 10." />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+<style>
+  /* Reset e base */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #1e293b, #334155);
+    color: #e2e8f0;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: 64px auto 56px;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* HEADER */
+  header {
+    position: sticky;
+    top: 0;
+    height: 64px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(12px) saturate(150%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    border-bottom: 1px solid rgba(255 255 255 / 0.1);
+    z-index: 1000;
+  }
+  header .logo {
+    font-weight: 700;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    background: linear-gradient(45deg, #6366f1 0%, #14b8a6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    user-select: none;
+  }
+  header nav.desktop-nav {
+    display: flex;
+    gap: 24px;
+  }
+  header nav.desktop-nav a {
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  header nav.desktop-nav a:hover,
+  header nav.desktop-nav a:focus {
+    background-color: rgba(255 255 255 / 0.15);
+    outline: none;
+  }
+
+  /* MOBILE MENU */
+  header button.mobile-menu-button {
+    background: none;
+    border: none;
+    color: #cbd5e1;
+    font-family: 'Material Icons';
+    font-size: 32px;
+    cursor: pointer;
+    display: none;
+  }
+  header button.mobile-menu-button:focus {
+    outline: 2px solid #14b8a6;
+    outline-offset: 2px;
+  }
+
+  /* SIDEBAR */
+  aside.sidebar {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(16px);
+    width: 280px;
+    min-width: 280px;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    overflow-y: auto;
+    border-right: 1px solid rgba(255 255 255 / 0.1);
+  }
+  aside.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  aside.sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    color: #cbd5e1;
+    font-weight: 600;
+    font-size: 1.125rem;
+    user-select: none;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  aside.sidebar nav a .material-icons {
+    font-size: 24px;
+  }
+  aside.sidebar nav a:hover,
+  aside.sidebar nav a:focus {
+    background: #14b8a6;
+    color: #000;
+    outline: none;
+  }
+  aside.sidebar nav a.active {
+    background: #0f766e;
+    color: #ecfdf5;
+  }
+  aside.sidebar nav a .badge {
+    background: #ef4444;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0 8px;
+    border-radius: 12px;
+    margin-left: auto;
+    min-width: 24px;
+    text-align: center;
+  }
+
+  /* MAIN CONTENT */
+  main.content {
+    padding: 40px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    min-height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+  main.content h1 {
+    font-weight: 800;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: #e0e7ff;
+    user-select: none;
+  }
+  main.content form {
+    background: rgba(51, 65, 85, 0.7);
+    padding: 24px 32px;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(20, 184, 166, 0.3);
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  main.content form label {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #94a3b8;
+    margin-bottom: 8px;
+    display: block;
+  }
+  main.content form input[type="number"] {
+    font-size: 1.125rem;
+    padding: 12px 16px;
+    border-radius: 16px;
+    border: none;
+    outline-offset: 3px;
+    outline-color: transparent;
+    transition: outline-color 0.25s ease;
+    font-family: 'Inter', sans-serif;
+  }
+  main.content form input[type="number"]:focus {
+    outline-color: #14b8a6;
+  }
+  main.content form .error-message {
+    color: #ef4444;
+    font-weight: 600;
+    font-size: 0.875rem;
+    height: 1.25rem;
+  }
+  main.content form button.submit-button {
+    font-weight: 700;
+    font-size: 1.125rem;
+    background: linear-gradient(135deg, #6366f1 0%, #14b8a6 100%);
+    border: none;
+    border-radius: 16px;
+    color: #f0f9ff;
+    padding: 16px 24px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  main.content form button.submit-button:hover,
+  main.content form button.submit-button:focus {
+    background: linear-gradient(135deg, #4f46e5 0%, #0f766e 100%);
+    outline: none;
+  }
+
+  /* RESULT DISPLAY */
+  .result-container {
+    max-width: 480px;
+    background: rgba(51, 65, 85, 0.7);
+    padding: 24px 32px;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
+    user-select: none;
+    color: #e0e7ff;
+  }
+  .result-container p {
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin: 0 0 16px 0;
+  }
+  .result-container .inspiration {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #a5f3fc;
+    font-style: italic;
+  }
+
+  /* FOOTER */
+  footer {
+    height: 56px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(255 255 255 / 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 0.875rem;
+  }
+  footer a {
+    color: #14b8a6;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+  footer a:hover,
+  footer a:focus {
+    color: #22d3ee;
+    outline: none;
+  }
+
+  /* Responsive Layout */
+  .app-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: calc(100vh - 120px);
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 767px) {
+    body {
+      grid-template-rows: 64px auto 56px;
+    }
+    header nav.desktop-nav {
+      display: none;
+    }
+    header button.mobile-menu-button {
+      display: block;
+    }
+    aside.sidebar {
+      position: fixed;
+      top: 64px;
+      left: -280px;
+      width: 280px;
+      height: calc(100vh - 64px);
+      padding-top: 24px;
+      transition: left 0.3s ease;
+      z-index: 1100;
+      border-right: none;
+      box-shadow: 4px 0 20px rgba(0,0,0,0.5);
+      overflow-y: auto;
+    }
+    aside.sidebar.open {
+      left: 0;
+    }
+    .app-layout {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+    main.content {
+      padding: 24px 20px 80px;
+      min-height: auto;
+    }
+  }
+
+  /* Tablet adjustments */
+  @media (min-width: 768px) and (max-width: 1023px){
+    .app-layout {
+      grid-template-columns: 280px 1fr;
+    }
+    aside.sidebar {
+      position: relative;
+      left: 0;
+      height: auto;
+      box-shadow: none;
+      border-right: 1px solid rgba(255 255 255 / 0.1);
+      overflow-y: visible;
+    }
+  }
+
+</style>
+</head>
+<body>
+  <header role="banner" aria-label="Cabeçalho principal">
+    <div class="logo" aria-label="Logo da aplicação">NumCompare</div>
+    <nav class="desktop-nav" role="navigation" aria-label="Navegação principal">
+      <a href="#" aria-current="page">Início</a>
+      <a href="#" tabindex="0">Funcionalidades</a>
+      <a href="#" tabindex="0">Contato</a>
+    </nav>
+    <button class="mobile-menu-button" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="sidebar" title="Menu">
+      menu
+    </button>
+  </header>
+
+  <div class="app-layout">
+    <aside class="sidebar" id="sidebar" role="complementary" aria-label="Menu lateral de navegação">
+      <nav role="navigation" aria-label="Menu lateral principal">
+        <a href="#" class="active" tabindex="0">
+          <span class="material-icons" aria-hidden="true">home</span>
+          Início
+        </a>
+        <a href="#" tabindex="0">
+          <span class="material-icons" aria-hidden="true">calculate</span>
+          Comparar Números
+          <span class="badge" aria-label="Você tem 2 novas notificações">2</span>
+        </a>
+        <a href="#" tabindex="0">
+          <span class="material-icons" aria-hidden="true">info</span>
+          Sobre
+        </a>
+      </nav>
+    </aside>
+
+    <main class="content" role="main">
+      <h1>Comparador de Números</h1>
+      <form id="numberForm" novalidate aria-describedby="formDescription">
+        <p id="formDescription" class="sr-only">Informe dois números para comparar.</p>
+        <label for="num1">Número 1</label>
+        <input type="number" id="num1" name="num1" required aria-required="true" aria-describedby="num1Error" autocomplete="off" />
+        <span id="num1Error" class="error-message" aria-live="polite"></span>
+
+        <label for="num2">Número 2</label>
+        <input type="number" id="num2" name="num2" required aria-required="true" aria-describedby="num2Error" autocomplete="off" />
+        <span id="num2Error" class="error-message" aria-live="polite"></span>
+
+        <button type="submit" class="submit-button" aria-live="polite">Comparar</button>
+      </form>
+
+      <section aria-live="polite" aria-atomic="true" aria-relevant="additions" id="resultSection" class="result-container" hidden>
+        <p id="resultText"></p>
+        <p id="inspirationText" class="inspiration"></p>
+      </section>
+    </main>
+  </div>
+
+  <footer role="contentinfo">
+    <div>
+      Desenvolvido por <a href="#" target="_blank" rel="noopener noreferrer">SuaEmpresa</a>
+    </div>
+  </footer>
+
+  <script>
+    const sidebar = document.querySelector('aside.sidebar');
+    const mobileMenuBtn = document.querySelector('.mobile-menu-button');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      const expanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+      if (!expanded) {
+        sidebar.classList.add('open');
+        mobileMenuBtn.setAttribute('aria-expanded', 'true');
+        sidebar.setAttribute('tabindex', '0');
+        sidebar.focus();
+      } else {
+        sidebar.classList.remove('open');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Accessibility: close sidebar on outside click (mobile)
+    document.addEventListener('click', (e) => {
+      if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        if (sidebar.classList.contains('open')) {
+          sidebar.classList.remove('open');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
+
+    // Form validation and comparison
+    const form = document.getElementById('numberForm');
+    const num1Input = document.getElementById('num1');
+    const num2Input = document.getElementById('num2');
+    const num1Error = document.getElementById('num1Error');
+    const num2Error = document.getElementById('num2Error');
+    const resultSection = document.getElementById('resultSection');
+    const resultText = document.getElementById('resultText');
+    const inspirationText = document.getElementById('inspirationText');
+
+    function validateInput(input, errorElem) {
+      if (input.validity.valueMissing) {
+        errorElem.textContent = 'Este campo é obrigatório.';
+        return false;
+      }
+      if (input.validity.badInput) {
+        errorElem.textContent = 'Insira um número válido.';
+        return false;
+      }
+      errorElem.textContent = '';
+      return true;
+    }
+
+    num1Input.addEventListener('input', () => validateInput(num1Input, num1Error));
+    num2Input.addEventListener('input', () => validateInput(num2Input, num2Error));
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const validNum1 = validateInput(num1Input, num1Error);
+      const validNum2 = validateInput(num2Input, num2Error);
+
+      if (!validNum1 || !validNum2) {
+        resultSection.hidden = true;
+        return;
+      }
+
+      const num1 = parseFloat(num1Input.value);
+      const num2 = parseFloat(num2Input.value);
+
+      let maior, menor;
+      if (num1 > num2) {
+        maior = num1;
+        menor = num2;
+      } else if (num2 > num1) {
+        maior = num2;
+        menor = num1;
+      } else {
+        // Números iguais
+        resultText.textContent = `Os números são iguais: ${num1}.`;
+        inspirationText.textContent = '';
+        resultSection.hidden = false;
+        return;
+      }
+
+      resultText.textContent = `O maior número é: ${maior}.`;
+
+      const diff = Math.abs(num1 - num2);
+      if (diff > 10) {
+        inspirationText.textContent = "A diferença é maior que 10. Lembre-se: 'A única maneira de fazer um ótimo trabalho é amar o que você faz.' - Steve Jobs";
+      } else {
+        inspirationText.textContent = '';
+      }
+
+      resultSection.hidden = false;
+    });
+  </script>
+</body>
+</html>
+
