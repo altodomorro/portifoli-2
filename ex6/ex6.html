@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Contador de Cliques</title>
+<title>Inscrição para Campeonato de Basquete 3x3</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
   body {
@@ -23,7 +23,7 @@
     padding: 32px;
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    max-width: 360px;
+    max-width: 400px;
     width: 100%;
     text-align: center;
   }
@@ -33,16 +33,10 @@
     font-size: 2rem;
   }
   .count-display {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 800;
     margin-bottom: 16px;
     min-height: 48px;
-  }
-  .bonus-emoji {
-    font-size: 2rem;
-    color: #10b981;
-    margin-bottom: 24px;
-    height: 28px;
   }
   button {
     font-size: 1.2rem;
@@ -54,66 +48,50 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
     width: 100%;
     margin-bottom: 16px;
-  }
-  #clickBtn {
     background: linear-gradient(135deg, #10b981, #047857);
     color: white;
   }
-  #clickBtn:hover,
-  #clickBtn:focus {
+  button:hover,
+  button:focus {
     background: linear-gradient(135deg, #047857, #065f46);
     transform: scale(1.05);
-    outline: none;
-  }
-  #resetBtn {
-    background: #e5e7eb;
-    color: #374151;
-  }
-  #resetBtn:hover,
-  #resetBtn:focus {
-    background: #d1d5db;
     outline: none;
   }
 </style>
 </head>
 <body>
-  <div class="container" role="main" aria-label="Contador de Cliques">
-    <h1>Contador de Cliques</h1>
-    <div id="countDisplay" class="count-display" aria-live="polite" aria-atomic="true">Cliques: 0</div>
-    <div id="bonusEmoji" class="bonus-emoji" aria-live="polite" aria-atomic="true"></div>
-    <button id="clickBtn" aria-describedby="countDisplay">Clique aqui</button>
-    <button id="resetBtn">Zerar Contagem</button>
+  <div class="container" role="main" aria-label="Inscrição para Campeonato de Basquete">
+    <h1>Inscrição para Campeonato de Basquete 3x3</h1>
+    <div id="countDisplay" class="count-display" aria-live="polite" aria-atomic="true">Inscritos: 0</div>
+    <div id="teamsDisplay" class="count-display" aria-live="polite" aria-atomic="true">Equipes Formadas: 0</div>
+    <button id="registerBtn">Inscrever-se</button>
   </div>
 
   <script>
-    const clickBtn = document.getElementById('clickBtn');
-    const resetBtn = document.getElementById('resetBtn');
+    const registerBtn = document.getElementById('registerBtn');
     const countDisplay = document.getElementById('countDisplay');
-    const bonusEmoji = document.getElementById('bonusEmoji');
+    const teamsDisplay = document.getElementById('teamsDisplay');
 
     let count = 0;
+    let alerted = false; // To track if alert already shown
 
-    // Update the count display and bonus emoji
     function updateDisplay() {
-      countDisplay.textContent = `Cliques: ${count}`;
-      if (count > 0 && count % 10 === 0) {
-        bonusEmoji.textContent = '(◕‿◕)';
-      } else {
-        bonusEmoji.textContent = '';
+      countDisplay.textContent = `Inscritos: ${count}`;
+      const teams = Math.floor(count / 3);
+      teamsDisplay.textContent = `Equipes Formadas: ${teams}`;
+
+      // Alert only once when 4 or more teams formed
+      if (teams >= 4 && !alerted) {
+        alert('Pode começar o jogo!');
+        alerted = true;
       }
     }
 
-    clickBtn.addEventListener('click', () => {
+    registerBtn.addEventListener('click', () => {
       count++;
       updateDisplay();
     });
 
-    resetBtn.addEventListener('click', () => {
-      count = 0;
-      updateDisplay();
-    });
-
-    // Initialize on load
     updateDisplay();
   </script>
 </body>

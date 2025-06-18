@@ -1,11 +1,162 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Estação do Ano pelo Mês</title>
+<style>
+  /* Modern web design standards applied */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+  :root {
+    --spring-bg: #a5d6a7;    /* soft green */
+    --summer-bg: #fdd835;    /* bright yellow */
+    --autumn-bg: #ff8a65;    /* warm orange */
+    --winter-bg: #90caf9;    /* cool blue */
+    --text-color: #222;
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    margin: 0; padding: 0;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh;
+    background-color: var(--winter-bg);
+    color: var(--text-color);
+    transition: background-color 0.5s ease;
+    padding: 16px;
+    text-align: center;
+  }
+  .container {
+    max-width: 420px;
+    width: 100%;
+    background: rgba(255 255 255 / 0.85);
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+  h1 {
+    margin-bottom: 24px;
+    font-weight: 700;
+    font-size: 2rem;
+    color: #111;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 1.2rem;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    outline-offset: 2px;
+    transition: border-color 0.3s ease;
+  }
+  input[type="text"]:focus {
+    border-color: #10b981;
+  }
+  button {
+    margin-top: 24px;
+    width: 100%;
+    padding: 14px 0;
+    background: linear-gradient(135deg, #10b981, #047857);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  button:hover,
+  button:focus {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.5);
+    outline: none;
+  }
+  .result {
+    margin-top: 32px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    min-height: 50px;
+  }
+</style>
 </head>
 <body>
-    
+  <div class="container" role="main">
+    <h1>Descubra a Estação do Ano</h1>
+    <label for="monthInput" class="sr-only">Digite o nome do mês</label>
+    <input
+      type="text"
+      id="monthInput"
+      placeholder="Digite o nome do mês (ex: Janeiro)"
+      aria-describedby="result"
+      autocomplete="off"
+    />
+    <button id="checkSeasonBtn" aria-label="Verificar estação">Verificar Estação</button>
+    <div id="result" class="result" role="region" aria-live="polite" aria-atomic="true"></div>
+  </div>
+
+  <script>
+    const monthInput = document.getElementById('monthInput');
+    const checkBtn = document.getElementById('checkSeasonBtn');
+    const result = document.getElementById('result');
+    const body = document.body;
+
+    // Map of months to seasons (all uppercase for comparison)
+    const seasons = {
+      'VERÃO': ['DEZEMBRO', 'JANEIRO', 'FEVEREIRO'],
+      'OUTONO': ['MARÇO', 'ABRIL', 'MAIO'],
+      'INVERNO': ['JUNHO', 'JULHO', 'AGOSTO'],
+      'PRIMAVERA': ['SETEMBRO', 'OUTUBRO', 'NOVEMBRO']
+    };
+
+    // Map seasons to background colors (CSS variables)
+    const seasonColors = {
+      'VERÃO': 'var(--summer-bg)',
+      'OUTONO': 'var(--autumn-bg)',
+      'INVERNO': 'var(--winter-bg)',
+      'PRIMAVERA': 'var(--spring-bg)'
+    };
+
+    function getSeason(month) {
+      for (const [season, months] of Object.entries(seasons)) {
+        if (months.includes(month)) {
+          return season;
+        }
+      }
+      return null;
+    }
+
+    function updateBackground(season) {
+      const color = seasonColors[season] || 'white';
+      body.style.backgroundColor = color;
+    }
+
+    checkBtn.addEventListener('click', () => {
+      let month = monthInput.value.trim().toUpperCase();
+
+      if (!month) {
+        result.textContent = 'Por favor, digite o nome de um mês.';
+        updateBackground(''); // reset to default if needed
+        return;
+      }
+
+      const season = getSeason(month);
+
+      if (season) {
+        result.textContent = `O mês de ${month.charAt(0) + month.slice(1).toLowerCase()} pertence à estação: ${season}.`;
+        updateBackground(season);
+      } else {
+        result.textContent = 'Mês inválido. Por favor, digite um nome de mês válido.';
+        updateBackground('');
+      }
+    });
+
+    // Allow pressing Enter key to trigger the check
+    monthInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        checkBtn.click();
+      }
+    });
+  </script>
 </body>
 </html>
+
