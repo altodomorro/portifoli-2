@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprendendo Repetições em JavaScript</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #3498db;
+            margin-top: 30px;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .result-box {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .code {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+        }
+        mark {
+            background-color: #ffeaa7;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .note {
+            background-color: #e3f2fd;
+            padding: 10px;
+            border-left: 4px solid #2196F3;
+            margin: 15px 0;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Aprendendo Repetições em JavaScript</h1>
+        
+        <div class="note">
+            <p>Esta página demonstra diferentes formas de criar repetições em JavaScript para contar de 1 até 10, com destaque especial para números pares usando <code>&lt;mark&gt;</code> e <code>&lt;b&gt;</code>.</p>
+        </div>
+
+        <h2>1. Contagem com While</h2>
+        <p>O loop <code>while</code> executa um bloco de código enquanto uma condição for verdadeira.</p>
+        
+        <div class="code">
+            let i = 1;<br>
+            while (i <= 10) {<br>
+            &nbsp;&nbsp;document.write(i + " ");<br>
+            &nbsp;&nbsp;i++;<br>
+            }
+        </div>
+        
+        <div class="result-box">
+            <script>
+                document.write("<p><strong>Resultado:</strong> ");
+                let i = 1;
+                while (i <= 10) {
+                    if (i % 2 === 0) {
+                        document.write("<mark><b>" + i + "</b></mark> ");
+                    } else {
+                        document.write(i + " ");
+                    }
+                    i++;
+                }
+                document.write("</p>");
+            </script>
+        </div>
+
+        <h2>2. Contagem com Do-While</h2>
+        <p>O loop <code>do-while</code> é similar ao <code>while</code>, mas garante que o bloco de código seja executado pelo menos uma vez.</p>
+        
+        <div class="code">
+            let j = 1;<br>
+            do {<br>
+            &nbsp;&nbsp;document.write(j + " ");<br>
+            &nbsp;&nbsp;j++;<br>
+            } while (j <= 10);
+        </div>
+        
+        <div class="result-box">
+            <script>
+                document.write("<p><strong>Resultado:</strong> ");
+                let j = 1;
+                do {
+                    if (j % 2 === 0) {
+                        document.write("<mark><b>" + j + "</b></mark> ");
+                    } else {
+                        document.write(j + " ");
+                    }
+                    j++;
+                } while (j <= 10);
+                document.write("</p>");
+            </script>
+        </div>
+
+        <h2>3. Contagem com For</h2>
+        <p>O loop <code>for</code> é mais compacto, combinando inicialização, condição e incremento em uma única linha.</p>
+        
+        <div class="code">
+            for (let k = 1; k <= 10; k++) {<br>
+            &nbsp;&nbsp;document.write(k + " ");<br>
+            }
+        </div>
+        
+        <div class="result-box">
+            <script>
+                document.write("<p><strong>Resultado:</strong> ");
+                for (let k = 1; k <= 10; k++) {
+                    if (k % 2 === 0) {
+                        document.write("<mark><b>" + k + "</b></mark> ");
+                    } else {
+                        document.write(k + " ");
+                    }
+                }
+                document.write("</p>");
+            </script>
+        </div>
+
+        <h2>Bônus: Somente Números Pares</h2>
+        <p>Demonstração de como filtrar e destacar apenas os números pares:</p>
+        
+        <div class="code">
+            for (let n = 1; n <= 10; n++) {<br>
+            &nbsp;&nbsp;if (n % 2 === 0) {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;document.write("&lt;mark&gt;&lt;b&gt;" + n + "&lt;/b&gt;&lt;/mark&gt; ");<br>
+            &nbsp;&nbsp;}<br>
+            }
+        </div>
+        
+        <div class="result-box">
+            <script>
+                document.write("<p><strong>Resultado (apenas pares):</strong> ");
+                for (let n = 1; n <= 10; n++) {
+                    if (n % 2 === 0) {
+                        document.write("<mark><b>" + n + "</b></mark> ");
+                    }
+                }
+                document.write("</p>");
+            </script>
+        </div>
+
+        <div class="note">
+            <h3>Como identificar números pares?</h3>
+            <p>Usamos o operador módulo (<code>%</code>) que retorna o resto da divisão. Se o resto da divisão por 2 for 0, o número é par:</p>
+            <div class="code">
+                if (numero % 2 === 0) {<br>
+                &nbsp;&nbsp;// É par<br>
+                }
+            </div>
+        </div>
+
+        <h2>Prática Interativa</h2>
+        <p>Experimente você mesmo! Clique no botão para ver a contagem com diferentes intervalos:</p>
+        
+        <button onclick="contar(1, 10)">Contar de 1 a 10</button>
+        <button onclick="contar(5, 15)">Contar de 5 a 15</button>
+        <button onclick="contar(10, 20)">Contar de 10 a 20</button>
+        
+        <div id="interactive-result" class="result-box" style="min-height: 50px;">
+            <!-- Resultado será exibido aqui -->
+        </div>
+
+        <script>
+            function contar(inicio, fim) {
+                let resultado = "<p><strong>Resultado de " + inicio + " a " + fim + ":</strong> ";
+                for (let x = inicio; x <= fim; x++) {
+                    if (x % 2 === 0) {
+                        resultado += "<mark><b>" + x + "</b></mark> ";
+                    } else {
+                        resultado += x + " ";
+                    }
+                }
+                resultado += "</p>";
+                document.getElementById("interactive-result").innerHTML = resultado;
+            }
+        </script>
+    </div>
+</body>
+</html>
