@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Tabuada</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .math-bg {
+            background-color: #f0f8ff;
+            background-image: 
+                radial-gradient(at 80% 0%, hsla(189, 100%, 56%, 0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, hsla(355, 100%, 93%, 0.1) 0px, transparent 50%);
+        }
+        
+        .math-card {
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .math-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.25);
+        }
+        
+        .table-container {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="math-bg min-h-screen flex items-center justify-center p-4">
+    <div class="math-card w-full max-w-md bg-white rounded-xl p-8">
+        <div class="flex items-center justify-center mb-6">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f812f0fb-e0ec-426d-a868-f7a94030c9d7.png" alt="Ícone de cálculo matemático com fundo azul e símbolo de multiplicação em branco" class="w-12 h-12 rounded-lg">
+            <h1 class="text-3xl font-bold text-gray-800 ml-3">Calculadora de Tabuada</h1>
+        </div>
+        
+        <p class="text-gray-600 mb-6 text-center">Digite um número para ver sua tabuada de 1 a 10</p>
+        
+        <div class="mb-6">
+            <label for="number" class="block text-sm font-medium text-gray-700 mb-2">Número:</label>
+            <div class="flex">
+                <input 
+                    type="number" 
+                    id="number" 
+                    placeholder="Ex: 5" 
+                    class="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                >
+                <button 
+                    onclick="gerarTabuada()"
+                    class="px-6 py-2 bg-blue-600 text-white font-medium rounded-r-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition"
+                >
+                    Calcular
+                </button>
+            </div>
+        </div>
+        
+        <div class="table-container mb-4 hidden" id="resultContainer">
+            <h2 class="text-xl font-semibold text-gray-700 mb-2" id="titleTabuada"></h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2 border-b border-gray-200 text-left text-sm font-medium text-gray-500">Operação</th>
+                            <th class="px-4 py-2 border-b border-gray-200 text-left text-sm font-medium text-gray-500">Resultado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabuadaBody" class="divide-y divide-gray-200"></tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="errorMessage" class="hidden p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"></div>
+        
+        <div class="flex items-center justify-center mt-4">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c8869d49-9c3c-45bd-a70c-5b9ab63de408.png" alt="Banner decorativo com texto Escola Mágica de Matemática em letras estilizadas" class="opacity-70">
+        </div>
+    </div>
+
+    <script>
+        function gerarTabuada() {
+            const numberInput = document.getElementById('number');
+            const resultContainer = document.getElementById('resultContainer');
+            const tabuadaBody = document.getElementById('tabuadaBody');
+            const titleTabuada = document.getElementById('titleTabuada');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Limpar mensagens de erro e resultados anteriores
+            errorMessage.classList.add('hidden');
+            tabuadaBody.innerHTML = '';
+            
+            const number = parseFloat(numberInput.value);
+            
+            if (isNaN(number)) {
+                errorMessage.textContent = 'Por favor, digite um número válido.';
+                errorMessage.classList.remove('hidden');
+                resultContainer.classList.add('hidden');
+                return;
+            }
+            
+            titleTabuada.textContent = `Tabuada do ${number}`;
+            
+            let count = 1;
+            while (count <= 10) {
+                const result = number * count;
+                
+                const row = document.createElement('tr');
+                
+                const operationCell = document.createElement('td');
+                operationCell.className = 'px-4 py-2 whitespace-nowrap text-sm text-gray-900';
+                operationCell.textContent = `${number} × ${count} =`;
+                
+                const resultCell = document.createElement('td');
+                resultCell.className = 'px-4 py-2 whitespace-nowrap text-sm font-semibold text-blue-600';
+                resultCell.textContent = result;
+                
+                row.appendChild(operationCell);
+                row.appendChild(resultCell);
+                tabuadaBody.appendChild(row);
+                
+                count++;
+            }
+            
+            resultContainer.classList.remove('hidden');
+        }
+        
+        // Permitir que a tecla Enter também gere a tabuada
+        document.getElementById('number').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                gerarTabuada();
+            }
+        });
+    </script>
+</body>
+</html>
+
