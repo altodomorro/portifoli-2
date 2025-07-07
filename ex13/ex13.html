@@ -1,11 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Calculadora de Números</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: auto; padding: 20px; text-align: center; background: #f5f5f5; }
+        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px #ddd; }
+        h1 { color: #333; }
+        .resultado { margin-top: 20px; padding: 15px; background: #e9f7ef; border-radius: 5px; display: none; }
+        button { background: #0ae2f6; color: white; border: none; padding: 10px 20px; margin-top: 20px; 
+                border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #f80909; }
+    </style>
 </head>
 <body>
-    
+    <div class="container">
+        <h1>Calculadora</h1>
+        <p>Digite números (0 para finalizar):</p>
+        <button onclick="coletarNumeros()">Iniciar</button>
+        <div id="resultado" class="resultado"></div>
+    </div>
+
+    <script>
+        function coletarNumeros() {
+            let nums = [];
+            while(true) {
+                let num = parseFloat(prompt("Número (0 para sair):"));
+                if(num === 0 || isNaN(num)) break;
+                nums.push(num);
+            }
+            if(nums.length > 0) {
+                let sum = nums.reduce((a,b)=>a+b, 0);
+                document.getElementById('resultado').innerHTML = `
+                    <h2>Resultados</h2>
+                    <p>Itens: ${nums.length}</p>
+                    <p>Soma: ${sum}</p>
+                    <p>Média: ${(sum/nums.length).toFixed(2)}</p>`;
+                document.getElementById('resultado').style.display = 'block';
+            }
+        }
+    </script>
 </body>
 </html>
+
